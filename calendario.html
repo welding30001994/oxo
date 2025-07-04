@@ -1,0 +1,949 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calendario de Pagos Futurista</title>
+    <style>
+        :root {
+            --neon-blue: #0ff0fc;
+            --neon-purple: #9600ff;
+            --dark-bg: #0a0a1a;
+            --card-bg: rgba(15, 15, 35, 0.8);
+            --text-color: #e0e0ff;
+            --inscription-color: #00ff88;
+            --monthly-color: #ff00e4;
+        }
+        
+        body {
+            font-family: 'Arial', sans-serif;
+            background: var(--dark-bg);
+            color: var(--text-color);
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(150, 0, 255, 0.1) 0%, transparent 20%),
+                radial-gradient(circle at 90% 80%, rgba(0, 255, 252, 0.1) 0%, transparent 20%);
+        }
+
+        .container {
+            max-width: 100%;
+            padding: 15px;
+            box-sizing: border-box;
+            margin: 0 auto;
+        }
+
+        @media (min-width: 768px) {
+            .container {
+                max-width: 800px;
+            }
+        }
+
+        /* Estilo para la sección de información bancaria */
+        .bank-info {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(0, 247, 255, 0.2);
+            box-shadow: 0 0 15px rgba(0, 247, 255, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .bank-info::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            z-index: -1;
+            background: linear-gradient(45deg, var(--neon-blue), var(--neon-purple));
+            border-radius: 14px;
+            opacity: 0.3;
+        }
+
+        .bank-info h2 {
+            color: var(--neon-blue);
+            text-align: center;
+            margin-top: 0;
+            font-size: 1.5rem;
+            text-shadow: 0 0 8px rgba(0, 247, 255, 0.5);
+        }
+
+        .bank-info p {
+            margin: 10px 0;
+            padding: 8px 0;
+            border-bottom: 1px dashed rgba(0, 247, 255, 0.3);
+            font-size: 1rem;
+            text-align: center;
+        }
+
+        .bank-info p:last-child {
+            border-bottom: none;
+        }
+
+        /* Estilos para el calendario */
+        .calendar-container {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 15px;
+            border: 1px solid rgba(0, 247, 255, 0.2);
+            box-shadow: 0 0 15px rgba(0, 247, 255, 0.1);
+            margin-bottom: 20px;
+        }
+
+        .calendar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .calendar-title {
+            font-size: 1.3rem;
+            color: var(--neon-blue);
+            text-shadow: 0 0 8px rgba(0, 247, 255, 0.5);
+        }
+
+        .calendar-nav button {
+            background: rgba(0, 247, 255, 0.1);
+            border: 1px solid var(--neon-blue);
+            color: var(--neon-blue);
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 0 5px;
+            transition: all 0.3s;
+        }
+
+        .calendar-nav button:hover {
+            background: rgba(0, 247, 255, 0.3);
+            box-shadow: 0 0 10px var(--neon-blue);
+        }
+
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 5px;
+        }
+
+        .calendar-weekdays {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 5px;
+            margin-bottom: 10px;
+        }
+
+        .weekday {
+            text-align: center;
+            font-weight: bold;
+            color: var(--neon-blue);
+            padding: 5px;
+            font-size: 0.9rem;
+        }
+
+        .calendar-day {
+            background: rgba(10, 20, 30, 0.5);
+            border: 1px solid rgba(0, 247, 255, 0.1);
+            border-radius: 5px;
+            padding: 8px;
+            min-height: 60px;
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .calendar-day:hover {
+            background: rgba(0, 247, 255, 0.1);
+            border-color: var(--neon-blue);
+        }
+
+        .day-number {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .today {
+            background: rgba(0, 247, 255, 0.2);
+            border-color: var(--neon-blue);
+            box-shadow: 0 0 10px var(--neon-blue);
+        }
+
+        .selected-week {
+            background: rgba(150, 0, 255, 0.2);
+            border-color: var(--neon-purple);
+            box-shadow: 0 0 10px var(--neon-purple);
+        }
+
+        .client-note {
+            font-size: 0.7rem;
+            padding: 2px 5px;
+            margin-top: 3px;
+            border-radius: 2px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .inscription-note {
+            background: rgba(0, 255, 136, 0.1);
+            border-left: 2px solid var(--inscription-color);
+        }
+
+        .monthly-note {
+            background: rgba(255, 0, 228, 0.1);
+            border-left: 2px solid var(--monthly-color);
+        }
+
+        /* Panel de edición */
+        .edit-panel {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 15px;
+            border: 1px solid rgba(0, 247, 255, 0.2);
+            box-shadow: 0 0 15px rgba(0, 247, 255, 0.1);
+            margin-bottom: 20px;
+        }
+
+        .edit-panel h3 {
+            color: var(--neon-blue);
+            margin-top: 0;
+            font-size: 1.2rem;
+        }
+
+        .payment-type {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 15px;
+        }
+
+        .payment-type button {
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid;
+            border-radius: 5px;
+            padding: 8px 15px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: bold;
+        }
+
+        .payment-type button.active {
+            box-shadow: 0 0 10px;
+        }
+
+        #inscriptionBtn {
+            border-color: var(--inscription-color);
+            color: var(--inscription-color);
+        }
+
+        #inscriptionBtn.active {
+            background: rgba(0, 255, 136, 0.2);
+            box-shadow: 0 0 10px var(--inscription-color);
+        }
+
+        #monthlyBtn {
+            border-color: var(--monthly-color);
+            color: var(--monthly-color);
+        }
+
+        #monthlyBtn.active {
+            background: rgba(255, 0, 228, 0.2);
+            box-shadow: 0 0 10px var(--monthly-color);
+        }
+
+        .edit-panel textarea {
+            width: 100%;
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(0, 247, 255, 0.3);
+            border-radius: 5px;
+            padding: 10px;
+            color: white;
+            margin-bottom: 10px;
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        .edit-panel button {
+            background: linear-gradient(45deg, var(--neon-blue), var(--neon-purple));
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+
+        .edit-panel button:hover {
+            box-shadow: 0 0 15px var(--neon-blue);
+        }
+
+        /* Registros de pagos */
+        .records-container {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        @media (min-width: 600px) {
+            .records-container {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        .records-column {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 15px;
+            border: 1px solid rgba(0, 247, 255, 0.2);
+            box-shadow: 0 0 15px rgba(0, 247, 255, 0.1);
+        }
+
+        .records-column h3 {
+            color: var(--neon-blue);
+            margin-top: 0;
+            text-align: center;
+            font-size: 1.2rem;
+        }
+
+        .records-list {
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .record-item {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 5px;
+            padding: 10px;
+            margin-bottom: 10px;
+            position: relative;
+        }
+
+        .record-item.inscription {
+            border-left: 3px solid var(--inscription-color);
+        }
+
+        .record-item.monthly {
+            border-left: 3px solid var(--monthly-color);
+        }
+
+        .record-date {
+            font-weight: bold;
+            color: var(--neon-blue);
+            margin-bottom: 5px;
+        }
+
+        .record-content {
+            font-size: 0.9rem;
+        }
+
+        .record-delete {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            background: rgba(255, 0, 0, 0.3);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 0.7rem;
+        }
+
+        /* Floating particles */
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            pointer-events: none;
+        }
+        
+        .particle {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: var(--neon-blue);
+            border-radius: 50%;
+            opacity: 0.5;
+            animation: float 15s infinite linear;
+        }
+        
+        @keyframes float {
+            0% {
+                transform: translateY(0) translateX(0);
+                opacity: 0;
+            }
+            50% {
+                opacity: 0.8;
+            }
+            100% {
+                transform: translateY(-100vh) translateX(100px);
+                opacity: 0;
+            }
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .bank-info p {
+                font-size: 0.9rem;
+            }
+            
+            .calendar-day {
+                min-height: 50px;
+                padding: 5px;
+            }
+            
+            .day-number {
+                font-size: 0.8rem;
+            }
+            
+            .client-note {
+                font-size: 0.6rem;
+            }
+            
+            .payment-type {
+                flex-direction: column;
+                gap: 10px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .bank-info h2 {
+                font-size: 1.2rem;
+            }
+            
+            .bank-info p {
+                font-size: 0.8rem;
+                padding: 6px 0;
+            }
+            
+            .calendar-title {
+                font-size: 1.1rem;
+            }
+            
+            .calendar-nav button {
+                padding: 3px 6px;
+                font-size: 0.8rem;
+            }
+            
+            .weekday {
+                font-size: 0.8rem;
+            }
+            
+            .calendar-day {
+                min-height: 40px;
+            }
+        }
+
+        @media (max-width: 350px) {
+            .calendar-grid {
+                gap: 3px;
+            }
+            
+            .calendar-day {
+                padding: 3px;
+                min-height: 35px;
+            }
+            
+            .day-number {
+                margin-bottom: 2px;
+            }
+        }
+
+        /* Mejoras adicionales de responsividad */
+        @media (max-width: 480px) {
+            .calendar-day {
+                min-height: 40px;
+                padding: 3px;
+            }
+            
+            .day-number {
+                font-size: 0.7rem;
+                margin-bottom: 2px;
+            }
+            
+            .client-note {
+                font-size: 0.55rem;
+                padding: 1px 2px;
+            }
+            
+            .bank-info p {
+                font-size: 0.75rem;
+                padding: 5px 0;
+            }
+            
+            .edit-panel h3 {
+                font-size: 1rem;
+            }
+            
+            .payment-type button {
+                padding: 5px 8px;
+                font-size: 0.7rem;
+            }
+        }
+
+        @media (max-width: 350px) {
+            .calendar-day {
+                min-height: 35px;
+            }
+            
+            .weekday {
+                font-size: 0.7rem;
+            }
+            
+            .bank-info h2 {
+                font-size: 1.1rem;
+            }
+            
+            .bank-info p {
+                font-size: 0.7rem;
+            }
+            
+            .records-column {
+                padding: 10px;
+            }
+            
+            .record-item {
+                padding: 8px;
+            }
+            
+            .record-date {
+                font-size: 0.8rem;
+            }
+            
+            .record-content {
+                font-size: 0.75rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Floating particles -->
+    <div class="particles" id="particles"></div>
+    
+    <div class="container">
+        <!-- Sección de información bancaria -->
+        <div class="bank-info">
+            <h2>BANCO PICHINCHA</h2>
+            <p>CUENTA DE AHORROS: 2203838240</p>
+            <p>********************************</p>
+            <p>NOMBRE: MIGUEL FONSECA</p>
+            <p>********************************</p>
+            <p>CÉDULA: 2100657739</p>
+            <p>********************************</p>
+            <p>WHATSAPP: 0980051394</p>
+        </div>
+        
+        <!-- Calendario -->
+        <div class="calendar-container">
+            <div class="calendar-header">
+                <div class="calendar-title" id="calendarTitle">Mes y Año</div>
+                <div class="calendar-nav">
+                    <button id="prevMonth"><i class="fas fa-chevron-left"></i></button>
+                    <button id="today">Hoy</button>
+                    <button id="nextMonth"><i class="fas fa-chevron-right"></i></button>
+                </div>
+            </div>
+            
+            <div class="calendar-weekdays">
+                <div class="weekday">Dom</div>
+                <div class="weekday">Lun</div>
+                <div class="weekday">Mar</div>
+                <div class="weekday">Mié</div>
+                <div class="weekday">Jue</div>
+                <div class="weekday">Vie</div>
+                <div class="weekday">Sáb</div>
+            </div>
+            
+            <div class="calendar-grid" id="calendarGrid">
+                <!-- Los días del calendario se generarán con JavaScript -->
+            </div>
+        </div>
+        
+        <!-- Panel de edición de notas -->
+        <div class="edit-panel">
+            <h3>Registro de Pagos - <span id="selectedDateText">Seleccione una fecha</span></h3>
+            
+            <div class="payment-type">
+                <button id="inscriptionBtn" class="active">Pago de Inscripción</button>
+                <button id="monthlyBtn">Pago de Mensualidad</button>
+            </div>
+            
+            <textarea id="clientNotes" placeholder="Registre aquí los detalles del pago..."></textarea>
+            <button id="saveNotes">Guardar Pago</button>
+        </div>
+        
+        <!-- Registros de pagos -->
+        <div class="records-container">
+            <div class="records-column">
+                <h3><i class="fas fa-user-plus"></i> Pagos de Inscripción</h3>
+                <div class="records-list" id="inscriptionRecords">
+                    <!-- Registros se generarán con JavaScript -->
+                </div>
+            </div>
+            
+            <div class="records-column">
+                <h3><i class="fas fa-calendar-alt"></i> Pagos de Mensualidad</h3>
+                <div class="records-list" id="monthlyRecords">
+                    <!-- Registros se generarán con JavaScript -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Font Awesome para iconos -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+    <script>
+        // Crear partículas flotantes
+        function createParticles() {
+            const particlesContainer = document.getElementById('particles');
+            for (let i = 0; i < 30; i++) {
+                const particle = document.createElement('div');
+                particle.classList.add('particle');
+                particle.style.left = `${Math.random() * 100}%`;
+                particle.style.top = `${Math.random() * 100}%`;
+                particle.style.width = `${Math.random() * 3 + 1}px`;
+                particle.style.height = particle.style.width;
+                particle.style.animationDelay = `${Math.random() * 15}s`;
+                particle.style.animationDuration = `${Math.random() * 10 + 10}s`;
+                particlesContainer.appendChild(particle);
+            }
+        }
+
+        // Variables del calendario
+        let currentDate = new Date();
+        let selectedDate = null;
+        let selectedWeek = null;
+        let paymentType = 'inscription'; // 'inscription' o 'monthly'
+        let paymentRecords = JSON.parse(localStorage.getItem('paymentRecords')) || {
+            inscription: [],
+            monthly: []
+        };
+
+        // Inicializar el calendario
+        document.addEventListener('DOMContentLoaded', function() {
+            createParticles();
+            renderCalendar();
+            setupEventListeners();
+            renderPaymentRecords();
+            
+            // Configurar botones de tipo de pago
+            document.getElementById('inscriptionBtn').addEventListener('click', function() {
+                paymentType = 'inscription';
+                this.classList.add('active');
+                document.getElementById('monthlyBtn').classList.remove('active');
+            });
+            
+            document.getElementById('monthlyBtn').addEventListener('click', function() {
+                paymentType = 'monthly';
+                this.classList.add('active');
+                document.getElementById('inscriptionBtn').classList.remove('active');
+            });
+        });
+
+        // Renderizar el calendario
+        function renderCalendar() {
+            const calendarTitle = document.getElementById('calendarTitle');
+            const calendarGrid = document.getElementById('calendarGrid');
+            
+            // Configurar título del mes y año
+            const monthNames = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", 
+                               "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
+            calendarTitle.textContent = `${monthNames[currentDate.getMonth()]} ${currentDate.getFullYear()}`;
+            
+            // Limpiar el grid
+            calendarGrid.innerHTML = '';
+            
+            // Obtener primer día del mes y último día del mes
+            const firstDay = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
+            const lastDay = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0);
+            
+            // Días de la semana del primer día (0-6, donde 0 es domingo)
+            const startDay = firstDay.getDay();
+            
+            // Días del mes anterior que se muestran
+            const prevMonthLastDay = new Date(currentDate.getFullYear(), currentDate.getMonth(), 0).getDate();
+            
+            // Crear días del mes anterior
+            for (let i = startDay - 1; i >= 0; i--) {
+                const dayElement = createDayElement(prevMonthLastDay - i, true);
+                calendarGrid.appendChild(dayElement);
+            }
+            
+            // Crear días del mes actual
+            for (let i = 1; i <= lastDay.getDate(); i++) {
+                const dayDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), i);
+                const dayElement = createDayElement(i, false, dayDate);
+                
+                // Marcar el día actual
+                const today = new Date();
+                if (dayDate.toDateString() === today.toDateString()) {
+                    dayElement.classList.add('today');
+                }
+                
+                // Marcar semana seleccionada
+                if (selectedWeek && isDateInWeek(dayDate, selectedWeek)) {
+                    dayElement.classList.add('selected-week');
+                }
+                
+                calendarGrid.appendChild(dayElement);
+            }
+            
+            // Calcular días restantes para completar la última semana
+            const remainingDays = 42 - (startDay + lastDay.getDate());
+            for (let i = 1; i <= remainingDays; i++) {
+                const dayElement = createDayElement(i, true);
+                calendarGrid.appendChild(dayElement);
+            }
+        }
+
+        // Crear elemento de día
+        function createDayElement(day, isOtherMonth, date = null) {
+            const dayElement = document.createElement('div');
+            dayElement.classList.add('calendar-day');
+            if (isOtherMonth) {
+                dayElement.style.opacity = '0.5';
+            }
+            
+            dayElement.innerHTML = `<div class="day-number">${day}</div>`;
+            
+            if (date) {
+                const dateKey = formatDateKey(date);
+                dayElement.dataset.date = dateKey;
+                
+                // Mostrar notas existentes
+                const inscriptionNotes = paymentRecords.inscription.filter(note => note.date === dateKey);
+                const monthlyNotes = paymentRecords.monthly.filter(note => note.date === dateKey);
+                
+                inscriptionNotes.forEach(note => {
+                    const notePreview = document.createElement('div');
+                    notePreview.classList.add('client-note', 'inscription-note');
+                    notePreview.textContent = `Inscripción: ${note.content.substring(0, 10)}...`;
+                    dayElement.appendChild(notePreview);
+                });
+                
+                monthlyNotes.forEach(note => {
+                    const notePreview = document.createElement('div');
+                    notePreview.classList.add('client-note', 'monthly-note');
+                    notePreview.textContent = `Mensualidad: ${note.content.substring(0, 10)}...`;
+                    dayElement.appendChild(notePreview);
+                });
+                
+                // Evento click para seleccionar día
+                dayElement.addEventListener('click', function() {
+                    selectDate(date);
+                });
+                
+                // Evento doble click para seleccionar semana
+                dayElement.addEventListener('dblclick', function() {
+                    selectWeek(date);
+                });
+            }
+            
+            return dayElement;
+        }
+
+        // Seleccionar fecha
+        function selectDate(date) {
+            selectedDate = date;
+            selectedWeek = null;
+            
+            // Actualizar interfaz
+            updateSelectedDateText();
+            document.getElementById('clientNotes').value = '';
+            renderCalendar();
+        }
+
+        // Seleccionar semana
+        function selectWeek(date) {
+            selectedWeek = getWeekDates(date);
+            selectedDate = null;
+            
+            // Actualizar interfaz
+            document.getElementById('selectedDateText').textContent = `Semana del ${formatDate(selectedWeek[0])} al ${formatDate(selectedWeek[6])}`;
+            document.getElementById('clientNotes').value = '';
+            renderCalendar();
+        }
+
+        // Obtener todas las fechas de la semana de una fecha dada
+        function getWeekDates(date) {
+            const day = date.getDay();
+            const startDate = new Date(date);
+            startDate.setDate(date.getDate() - day);
+            
+            const weekDates = [];
+            for (let i = 0; i < 7; i++) {
+                const newDate = new Date(startDate);
+                newDate.setDate(startDate.getDate() + i);
+                weekDates.push(newDate);
+            }
+            
+            return weekDates;
+        }
+
+        // Verificar si una fecha está en la semana seleccionada
+        function isDateInWeek(date, week) {
+            return week.some(weekDate => 
+                date.getFullYear() === weekDate.getFullYear() &&
+                date.getMonth() === weekDate.getMonth() &&
+                date.getDate() === weekDate.getDate()
+            );
+        }
+
+        // Actualizar texto de fecha seleccionada
+        function updateSelectedDateText() {
+            if (selectedDate) {
+                document.getElementById('selectedDateText').textContent = formatDate(selectedDate);
+            }
+        }
+
+        // Formatear fecha como clave (YYYY-MM-DD)
+        function formatDateKey(date) {
+            return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
+        }
+
+        // Formatear fecha para mostrar (DD/MM/YYYY)
+        function formatDate(date) {
+            return `${String(date.getDate()).padStart(2, '0')}/${String(date.getMonth() + 1).padStart(2, '0')}/${date.getFullYear()}`;
+        }
+
+        // Configurar event listeners
+        function setupEventListeners() {
+            // Navegación del calendario
+            document.getElementById('prevMonth').addEventListener('click', function() {
+                currentDate.setMonth(currentDate.getMonth() - 1);
+                renderCalendar();
+            });
+            
+            document.getElementById('nextMonth').addEventListener('click', function() {
+                currentDate.setMonth(currentDate.getMonth() + 1);
+                renderCalendar();
+            });
+            
+            document.getElementById('today').addEventListener('click', function() {
+                currentDate = new Date();
+                renderCalendar();
+            });
+            
+            // Guardar notas
+            document.getElementById('saveNotes').addEventListener('click', function() {
+                const noteText = document.getElementById('clientNotes').value.trim();
+                
+                if (!noteText) {
+                    alert('Por favor ingrese los detalles del pago');
+                    return;
+                }
+                
+                if (selectedDate) {
+                    addPaymentRecord(selectedDate, noteText);
+                } else if (selectedWeek) {
+                    selectedWeek.forEach(date => {
+                        addPaymentRecord(date, noteText);
+                    });
+                } else {
+                    alert('Por favor seleccione una fecha o semana');
+                }
+            });
+        }
+
+        // Añadir registro de pago
+        function addPaymentRecord(date, content) {
+            const dateKey = formatDateKey(date);
+            const record = {
+                id: Date.now().toString(),
+                date: dateKey,
+                content: content,
+                timestamp: new Date().toISOString()
+            };
+            
+            if (paymentType === 'inscription') {
+                paymentRecords.inscription.push(record);
+            } else {
+                paymentRecords.monthly.push(record);
+            }
+            
+            localStorage.setItem('paymentRecords', JSON.stringify(paymentRecords));
+            renderCalendar();
+            renderPaymentRecords();
+            document.getElementById('clientNotes').value = '';
+        }
+
+        // Renderizar registros de pagos
+        function renderPaymentRecords() {
+            const inscriptionRecords = document.getElementById('inscriptionRecords');
+            const monthlyRecords = document.getElementById('monthlyRecords');
+            
+            // Ordenar registros por fecha (más recientes primero)
+            const sortedInscription = [...paymentRecords.inscription].sort((a, b) => 
+                new Date(b.timestamp) - new Date(a.timestamp));
+            const sortedMonthly = [...paymentRecords.monthly].sort((a, b) => 
+                new Date(b.timestamp) - new Date(a.timestamp));
+            
+            // Renderizar inscripciones
+            inscriptionRecords.innerHTML = '';
+            sortedInscription.forEach(record => {
+                const recordElement = createRecordElement(record, 'inscription');
+                inscriptionRecords.appendChild(recordElement);
+            });
+            
+            // Renderizar mensualidades
+            monthlyRecords.innerHTML = '';
+            sortedMonthly.forEach(record => {
+                const recordElement = createRecordElement(record, 'monthly');
+                monthlyRecords.appendChild(recordElement);
+            });
+        }
+
+        // Crear elemento de registro
+        function createRecordElement(record, type) {
+            const recordElement = document.createElement('div');
+            recordElement.classList.add('record-item', type);
+            recordElement.dataset.id = record.id;
+            
+            const date = new Date(record.timestamp);
+            const formattedDate = formatDate(date);
+            
+            recordElement.innerHTML = `
+                <div class="record-date">${formattedDate}</div>
+                <div class="record-content">${record.content}</div>
+                <button class="record-delete" onclick="deletePaymentRecord('${record.id}', '${type}')">
+                    <i class="fas fa-trash"></i>
+                </button>
+            `;
+            
+            return recordElement;
+        }
+
+        // Eliminar registro de pago
+        function deletePaymentRecord(id, type) {
+            if (confirm('¿Está seguro que desea eliminar este registro?')) {
+                if (type === 'inscription') {
+                    paymentRecords.inscription = paymentRecords.inscription.filter(record => record.id !== id);
+                } else {
+                    paymentRecords.monthly = paymentRecords.monthly.filter(record => record.id !== id);
+                }
+                
+                localStorage.setItem('paymentRecords', JSON.stringify(paymentRecords));
+                renderCalendar();
+                renderPaymentRecords();
+            }
+        }
+        
+        // Hacer la función accesible globalmente
+        window.deletePaymentRecord = deletePaymentRecord;
+    </script>
+</body>
+</html>
