@@ -959,6 +959,690 @@
        © 2010 Oxomax-Trading. Todos los derechos reservados.
     </footer>
     
+  
+  
+  
+  
+  <!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OXOMAX | Trading del Futuro</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #00f7ff;
+            --secondary: #7b2dff;
+            --dark: #0a0a1a;
+            --darker: #050510;
+            --light: #e0e0ff;
+            --accent: #ff2d7b;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            background-color: var(--dark);
+            color: var(--light);
+            font-family: 'Roboto', sans-serif;
+            line-height: 1.6;
+            overflow-x: hidden;
+            background-image: 
+                radial-gradient(circle at 25% 25%, rgba(123, 45, 255, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 75% 75%, rgba(0, 247, 255, 0.15) 0%, transparent 50%);
+        }
+        
+        .cyber-glitch {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 9999;
+            opacity: 0.03;
+            background: 
+                linear-gradient(0deg, transparent 48%, var(--primary) 49%, var(--primary) 51%, transparent 52%),
+                linear-gradient(90deg, transparent 48%, var(--accent) 49%, var(--accent) 51%, transparent 52%);
+            background-size: 10px 10px;
+            animation: glitch 0.1s infinite;
+        }
+        
+        @keyframes glitch {
+            0%, 100% { transform: translate(0); }
+            20% { transform: translate(-2px, 2px); }
+            40% { transform: translate(-2px, -2px); }
+            60% { transform: translate(2px, 2px); }
+            80% { transform: translate(2px, -2px); }
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+            position: relative;
+            z-index: 10;
+        }
+        
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 0;
+            border-bottom: 1px solid rgba(0, 247, 255, 0.3);
+            margin-bottom: 3rem;
+        }
+        
+        .logo {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 10px rgba(0, 247, 255, 0.3);
+            letter-spacing: 2px;
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+        }
+        
+        .nav-links a {
+            color: var(--light);
+            text-decoration: none;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.9rem;
+            letter-spacing: 1px;
+            position: relative;
+            padding: 0.5rem 0;
+        }
+        
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--primary);
+            transition: width 0.3s ease;
+        }
+        
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+        
+        .hero {
+            text-align: center;
+            padding: 5rem 0;
+            position: relative;
+        }
+        
+        .hero h1 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 4rem;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 20px rgba(0, 247, 255, 0.5);
+        }
+        
+        .hero p {
+            font-size: 1.2rem;
+            max-width: 700px;
+            margin: 0 auto 2rem;
+            color: rgba(224, 224, 255, 0.8);
+        }
+        
+        .cta-button {
+            display: inline-block;
+            padding: 1rem 2.5rem;
+            background: linear-gradient(45deg, var(--secondary), var(--primary));
+            color: var(--darker);
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 700;
+            text-decoration: none;
+            border-radius: 50px;
+            border: none;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.3s, box-shadow 0.3s;
+            box-shadow: 0 0 15px rgba(0, 247, 255, 0.5);
+            letter-spacing: 1px;
+        }
+        
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 0 25px rgba(0, 247, 255, 0.8);
+        }
+        
+        .cta-button::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(
+                to bottom right,
+                rgba(255, 255, 255, 0) 45%,
+                rgba(255, 255, 255, 0.3) 50%,
+                rgba(255, 255, 255, 0) 55%
+            );
+            transform: rotate(30deg);
+            animation: shine 3s infinite;
+        }
+        
+        @keyframes shine {
+            0% { transform: translateX(-100%) rotate(30deg); }
+            100% { transform: translateX(100%) rotate(30deg); }
+        }
+        
+        .courses-section {
+            padding: 4rem 0;
+        }
+        
+        .section-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2.5rem;
+            text-align: center;
+            margin-bottom: 3rem;
+            position: relative;
+            display: inline-block;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, var(--primary), transparent);
+        }
+        
+        .courses-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 2rem;
+        }
+        
+        .course-card {
+            background: rgba(10, 10, 26, 0.7);
+            border-radius: 10px;
+            padding: 2rem;
+            border: 1px solid rgba(0, 247, 255, 0.2);
+            transition: transform 0.3s, box-shadow 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .course-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                135deg,
+                rgba(0, 247, 255, 0.05) 0%,
+                rgba(123, 45, 255, 0.05) 100%
+            );
+            z-index: -1;
+        }
+        
+        .course-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 30px rgba(0, 247, 255, 0.2);
+            border-color: var(--primary);
+        }
+        
+        .course-card h3 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: var(--primary);
+        }
+        
+        .course-card .price {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            color: var(--light);
+            font-family: 'Orbitron', sans-serif;
+        }
+        
+        .course-card .price::before {
+            content: '$';
+            color: var(--accent);
+        }
+        
+        .course-card .info-item {
+            margin-bottom: 0.8rem;
+            display: flex;
+            align-items: center;
+        }
+        
+        .course-card .info-item::before {
+            content: '▹';
+            color: var(--primary);
+            margin-right: 0.5rem;
+            font-size: 0.8rem;
+        }
+        
+        .course-card .buy-button {
+            display: inline-block;
+            padding: 0.8rem 1.5rem;
+            background: transparent;
+            color: var(--primary);
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 700;
+            text-decoration: none;
+            border-radius: 5px;
+            border: 2px solid var(--primary);
+            cursor: pointer;
+            margin-top: 1.5rem;
+            transition: all 0.3s;
+            text-align: center;
+            width: 100%;
+        }
+        
+        .course-card .buy-button:hover {
+            background: var(--primary);
+            color: var(--dark);
+            box-shadow: 0 0 15px rgba(0, 247, 255, 0.5);
+        }
+        
+        .payment-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(5, 5, 16, 0.9);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            backdrop-filter: blur(5px);
+        }
+        
+        .payment-content {
+            background: var(--darker);
+            border: 1px solid var(--primary);
+            border-radius: 10px;
+            padding: 2rem;
+            max-width: 600px;
+            width: 90%;
+            position: relative;
+            box-shadow: 0 0 30px rgba(0, 247, 255, 0.3);
+        }
+        
+        .payment-content h2 {
+            font-family: 'Orbitron', sans-serif;
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+            text-align: center;
+            font-size: 1.8rem;
+        }
+        
+        .payment-content .close {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            color: var(--light);
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+        
+        .payment-content .close:hover {
+            color: var(--accent);
+        }
+        
+        .bank-info {
+            margin-bottom: 2rem;
+        }
+        
+        .bank-info p {
+            margin-bottom: 0.8rem;
+            display: flex;
+        }
+        
+        .bank-info p strong {
+            min-width: 150px;
+            color: var(--primary);
+        }
+        
+        .qr-container {
+            text-align: center;
+            margin: 2rem 0;
+            padding: 1rem;
+            background: rgba(0, 247, 255, 0.05);
+            border-radius: 5px;
+            border: 1px dashed var(--primary);
+        }
+        
+        .qr-container img {
+            max-width: 200px;
+            margin: 0 auto;
+            display: block;
+            filter: hue-rotate(0deg);
+            animation: qrGlow 3s infinite alternate;
+        }
+        
+        @keyframes qrGlow {
+            0% { filter: hue-rotate(0deg) drop-shadow(0 0 5px rgba(0, 247, 255, 0.5)); }
+            100% { filter: hue-rotate(20deg) drop-shadow(0 0 15px rgba(0, 247, 255, 0.8)); }
+        }
+        
+        .instructions {
+            font-size: 0.9rem;
+            color: rgba(224, 224, 255, 0.7);
+            text-align: center;
+            margin-top: 1.5rem;
+            line-height: 1.6;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 2rem 0;
+            margin-top: 4rem;
+            border-top: 1px solid rgba(0, 247, 255, 0.3);
+            font-size: 0.9rem;
+            color: rgba(224, 224, 255, 0.6);
+        }
+        
+        .cyber-line {
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--primary), transparent);
+            margin: 1rem 0;
+        }
+        
+        /* Efectos futuristas adicionales */
+        .floating-shapes {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+        
+        .shape {
+            position: absolute;
+            opacity: 0.1;
+            border-radius: 50%;
+            filter: blur(30px);
+        }
+        
+        .shape-1 {
+            width: 300px;
+            height: 300px;
+            background: var(--primary);
+            top: -100px;
+            left: -100px;
+            animation: float 15s infinite ease-in-out;
+        }
+        
+        .shape-2 {
+            width: 400px;
+            height: 400px;
+            background: var(--secondary);
+            bottom: -150px;
+            right: -100px;
+            animation: float 20s infinite ease-in-out reverse;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            25% { transform: translate(50px, 50px) rotate(5deg); }
+            50% { transform: translate(0, 100px) rotate(0deg); }
+            75% { transform: translate(-50px, 50px) rotate(-5deg); }
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+            
+            .courses-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .nav-links {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="cyber-glitch"></div>
+    <div class="floating-shapes">
+        <div class="shape shape-1"></div>
+        <div class="shape shape-2"></div>
+    </div>
+    
+    <div class="container">
+       
+        
+
+        
+        <div class="cyber-line"></div>
+        
+        <section class="courses-section" id="courses">
+            <h2 class="section-title">NUESTROS PROGRAMAS</h2>
+            
+            <div class="courses-grid">
+                <!-- Curso Básico -->
+                <div class="course-card">
+                    <h3>BASIC QUANTUM</h3>
+                    <div class="price">30</div>
+                    <div class="info-item">inscripcion 30 dolares </div>
+                    <div class="info-item">12 semanas (3 meses)</div>
+                    <div class="info-item">Capital: $20 - $500</div>
+                    <div class="info-item">Operaciones: 0.01 - 0.05</div>
+                    <div class="info-item">Ganancias: $5-$20 diarios</div>
+                    <div class="info-item"> Ganancias mensuales $150-$600 mensuales</div>
+                    <button class="buy-button" onclick="openPaymentModal('BASIC QUANTUM', 30)">ACCEDER AL PROGRAMA</button>
+                </div>
+                
+                <!-- Curso Medio -->
+                <div class="course-card">
+                    <h3>INTERMEDIATE NEO</h3>
+                    <div class="price">80</div>
+                    <div class="info-item">inscripcion 80 dolares </div>
+                    <div class="info-item">16 semanas (4 meses)</div>
+                    <div class="info-item">Capital: $500 - $1000</div>
+                    <div class="info-item">Operaciones: 0.05 - 0.15</div>
+                   <div class="info-item"> Ganancias mensuales $30-$50 mensuales</div>
+                    <div class="info-item"> Ganancias mensuales $900-$1500 mensuales</div>
+                    <button class="buy-button" onclick="openPaymentModal('INTERMEDIATE NEO', 80)">ACCEDER AL PROGRAMA</button>
+                </div>
+                
+                <!-- Curso Avanzado -->
+                <div class="course-card">
+                    <h3>ADVANCED ALPHA</h3>
+                    <div class="price">150</div>
+                    <div class="info-item">inscripcion 150 dolares </div>
+                    <div class="info-item">16 semanas (4 meses)</div>
+                    <div class="info-item">Capital: $1000 - $3000</div>
+                    <div class="info-item">Operaciones: 0.15 - 0.30</div>
+                      <div class="info-item"> Ganancias  $50-$100 diarias</div>
+                     <div class="info-item"> Ganancias mensuales $1500-$3000 mensuales</div>
+                    <button class="buy-button" onclick="openPaymentModal('ADVANCED ALPHA', 150)">ACCEDER AL PROGRAMA</button>
+                </div>
+                
+                <!-- Curso Zafiro -->
+                <div class="course-card">
+                    <h3>SAPPHIRE PRO</h3>
+                    <div class="price">250</div>
+                  <div class="info-item">inscripcion 250 dolares </div>
+                    <div class="info-item">12 semanas (3 meses)</div>
+                    <div class="info-item">Capital: $3000 - $7000</div>
+                    <div class="info-item">Operaciones: 0.30 - 0.45</div>
+                    <div class="info-item">Ganancias: $100-$300 diarios</div>
+                    <div class="info-item"> Ganancias mensuales $3000-$9000 </div>
+                    <button class="buy-button" onclick="openPaymentModal('SAPPHIRE PRO', 250)">ACCEDER AL PROGRAMA</button>
+                </div>
+                
+                <!-- Curso Platinum -->
+                <div class="course-card">
+                    <h3>PLATINUM ELITE</h3>
+                    <div class="price">400</div>
+                  <div class="info-item">inscripcion 400 dolares </div>
+                    <div class="info-item">16 semanas (4 meses)</div>
+                    <div class="info-item">Capital: $3000 - $7000</div>
+                    <div class="info-item">Operaciones: 0.30 - 0.45</div>
+                    <div class="info-item">Ganancias: $300-$500 diarios</div>
+                    <div class="info-item"> Ganancias mensuales $9000-$15000 </div>
+                    <button class="buy-button" onclick="openPaymentModal('PLATINUM ELITE', 400)">ACCEDER AL PROGRAMA</button>
+                </div>
+                
+                <!-- Curso Oro -->
+                <div class="course-card">
+                    <h3>GOLD MASTER</h3>
+                    <div class="price">700</div>
+                  <div class="info-item">inscripcion 700 dolares </div>
+                    <div class="info-item">16 semanas (4 meses)</div>
+                    <div class="info-item">Capital: $7000 - $13000</div>
+                    <div class="info-item">Operaciones: 0.45 - 0.70</div>
+                    <div class="info-item">Ganancias: $500-$700 diarios</div>
+                    <div class="info-item"> Ganancias mensuales $15000-$21000</div>
+                    <button class="buy-button" onclick="openPaymentModal('GOLD MASTER', 700)">ACCEDER AL PROGRAMA</button>
+                </div>
+            </div>
+        </section>
+        
+        <footer>
+            <p>© 2010 OXOMAX TRADING SYSTEMS | Todos los derechos reservados</p>
+            <p>El trading implica riesgos. Los resultados pasados no garantizan rendimientos futuros.</p>
+        </footer>
+    </div>
+    
+    <!-- Modal de Pago -->
+    <div class="payment-modal" id="paymentModal">
+        <div class="payment-content">
+            <span class="close" onclick="closePaymentModal()">&times;</span>
+            <h2 id="modalCourseTitle">PROGRAMA</h2>
+            <div class="cyber-line"></div>
+            
+            <div class="bank-info">
+                <p><strong>Banco:</strong> Pichincha</p>
+                <p><strong>Tipo de cuenta:</strong> Ahorro</p>
+                <p><strong>Titular:</strong> Miguel Fonseca</p>
+                <p><strong>Número de cuenta:</strong> 2203838240</p>
+                <p><strong>Usdt :</strong> TJujJqGa14F56TKDqWtz3yFvk4EubnxdeD </p>
+                <p><strong>Monto a transferir:</strong> <span id="modalCoursePrice">$0</span></p>
+            </div>
+            
+            <div class="qr-container">
+                <p>ESCANEA EL CÓDIGO QR PARA PAGO RÁPIDO</p>
+                <img src="https://raw.githubusercontent.com/welding30001994/OXOMAX/refs/heads/main/Imagen%20de%20WhatsApp%202025-07-05%20a%20las%2010.51.30_d5c53b73.jpg" alt="Código QR para transferencia">
+            </div>
+            
+            <div class="instructions">
+                <p>Realiza la transferencia por el monto exacto indicado.</p>
+                <p>Envía el comprobante de pago a nuestro WhatsApp +593980051394 para activar tu acceso al programa.</p>
+                <p>El acceso se habilita dentro de las 24 horas posteriores a la confirmación del pago.</p>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Modal de pago
+        function openPaymentModal(courseName, price) {
+            document.getElementById('modalCourseTitle').textContent = courseName;
+            document.getElementById('modalCoursePrice').textContent = '$' + price;
+            document.getElementById('paymentModal').style.display = 'flex';
+        }
+        
+        function closePaymentModal() {
+            document.getElementById('paymentModal').style.display = 'none';
+        }
+        
+        // Cerrar modal al hacer click fuera
+        window.onclick = function(event) {
+            const modal = document.getElementById('paymentModal');
+            if (event.target === modal) {
+                closePaymentModal();
+            }
+        }
+        
+        // Scroll suave
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+        
+        // Botón de cursos
+        document.getElementById('open-courses').addEventListener('click', () => {
+            document.getElementById('courses').scrollIntoView({
+                behavior: 'smooth'
+            });
+        });
+        
+        // Efecto de escritura en el título
+        const heroTitle = document.querySelector('.hero h1');
+        const text = heroTitle.textContent;
+        heroTitle.textContent = '';
+        
+        let i = 0;
+        const typeWriter = () => {
+            if (i < text.length) {
+                heroTitle.textContent += text.charAt(i);
+                i++;
+                setTimeout(typeWriter, 50);
+            }
+        };
+        
+        setTimeout(typeWriter, 1000);
+    </script>
+</body>
+</html>
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
     <div class="particles" id="particles"></div>
     
     <script>
