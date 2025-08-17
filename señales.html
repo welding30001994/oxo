@@ -224,7 +224,7 @@
 </head>
 <body>
     <header>
-<H1>OXXOMAXTRADING</H1>
+        <H1>OXXOMAXTRADING</H1>
     </header>
 
     <div class="contenedor-grifd">
@@ -302,12 +302,6 @@
                 likeComment(likeSpan, commentData);
             };
 
-            var deleteSpan = document.createElement("span");
-            deleteSpan.innerHTML = "🗑";
-            deleteSpan.onclick = function () {
-                deleteComment(commentContainer, commentData);
-            };
-
             var timeSpan = document.createElement("span");
             timeSpan.innerHTML = new Date(commentData.timestamp).toLocaleString();
             timeSpan.style.color = "#00ffff";
@@ -315,7 +309,6 @@
 
             actionsDiv.appendChild(likeSpan);
             actionsDiv.appendChild(timeSpan);
-            actionsDiv.appendChild(deleteSpan);
 
             commentContainer.appendChild(commentParagraph);
 
@@ -356,24 +349,6 @@
                     likeSpan.style.color = "";
                     likeSpan.style.transform = "";
                 }, 300);
-            }
-        }
-
-        function deleteComment(commentElement, commentData) {
-            if (confirm("¿Estás seguro de eliminar esta publicación?")) {
-                let comments = JSON.parse(localStorage.getItem("comments")) || [];
-                comments = comments.filter(c => 
-                    c.text !== commentData.text || 
-                    c.image !== commentData.image || 
-                    c.timestamp !== commentData.timestamp
-                );
-                localStorage.setItem("comments", JSON.stringify(comments));
-                
-                // Efecto de desvanecimiento al eliminar
-                commentElement.style.animation = "fadeOut 0.5s ease-out";
-                setTimeout(() => {
-                    commentElement.remove();
-                }, 500);
             }
         }
 
