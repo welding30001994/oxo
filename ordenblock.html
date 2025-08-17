@@ -3,395 +3,203 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Block & SAR Master - Order Blocks y Parabolic SAR</title>
+    <title>Sistema de Trading Avanzado - Block Order, Parabolic SAR, Ichimoku y EMA</title>
     <style>
         :root {
-            --primary: #6c5ce7;
-            --secondary: #a29bfe;
-            --dark: #0f0e1a;
-            --light: #f8f9fa;
-            --accent: #fd79a8;
-            --block: rgba(108, 92, 231, 0.2);
-            --sar: rgba(253, 121, 168, 0.2);
-        }
-        
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            --primary: #00f7ff;
+            --secondary: #0066ff;
+            --dark: #0a0a1a;
+            --light: #e0e0ff;
+            --accent: #ff00aa;
         }
         
         body {
+            font-family: 'Arial', sans-serif;
             background-color: var(--dark);
             color: var(--light);
-            overflow-x: hidden;
-        }
-        
-        header {
-            background: linear-gradient(135deg, var(--dark), var(--primary));
-            padding: 1rem 2rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: 0 0 20px rgba(108, 92, 231, 0.3);
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
-        
-        .logo {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        
-        .logo h1 {
-            font-size: 1.8rem;
-            background: linear-gradient(to right, var(--primary), var(--accent));
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-            text-shadow: 0 0 10px rgba(108, 92, 231, 0.3);
-        }
-        
-        nav ul {
-            display: flex;
-            list-style: none;
-            gap: 2rem;
-        }
-        
-        nav a {
-            color: var(--light);
-            text-decoration: none;
-            font-weight: 500;
-            transition: all 0.3s ease;
-            padding: 0.5rem 1rem;
-            border-radius: 5px;
-        }
-        
-        nav a:hover {
-            background-color: rgba(108, 92, 231, 0.2);
-            color: var(--primary);
-            transform: translateY(-3px);
-        }
-        
-        .hero {
-            height: 80vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-            padding: 0 2rem;
-            background: radial-gradient(circle at center, rgba(108, 92, 231, 0.1), transparent 70%);
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .hero::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: url('https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80') no-repeat center center/cover;
-            opacity: 0.2;
-            z-index: -1;
-        }
-        
-        .hero h2 {
-            font-size: 3.5rem;
-            margin-bottom: 1rem;
-            background: linear-gradient(to right, var(--primary), var(--accent));
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-        }
-        
-        .hero p {
-            font-size: 1.2rem;
-            max-width: 700px;
-            margin-bottom: 2rem;
+            margin: 0;
+            padding: 0;
             line-height: 1.6;
-        }
-        
-        .btn {
-            display: inline-block;
-            padding: 0.8rem 2rem;
-            background: linear-gradient(45deg, var(--primary), var(--accent));
-            color: var(--dark);
-            text-decoration: none;
-            border-radius: 50px;
-            font-weight: bold;
-            transition: all 0.3s ease;
-            box-shadow: 0 5px 15px rgba(108, 92, 231, 0.4);
-            border: none;
-            cursor: pointer;
-        }
-        
-        .btn:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 20px rgba(108, 92, 231, 0.6);
         }
         
         .container {
             max-width: 1200px;
             margin: 0 auto;
-            padding: 4rem 2rem;
+            padding: 20px;
         }
         
-        section {
-            margin-bottom: 5rem;
-        }
-        
-        h2.section-title {
-            font-size: 2.5rem;
-            margin-bottom: 2rem;
+        header {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            padding: 30px 0;
             text-align: center;
-            background: linear-gradient(to right, var(--primary), var(--accent));
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
+            border-radius: 0 0 20px 20px;
+            margin-bottom: 40px;
+            box-shadow: 0 10px 30px rgba(0, 255, 255, 0.2);
         }
         
-        .grid {
+        h1 {
+            font-size: 3rem;
+            margin: 0;
+            background: linear-gradient(to right, #ffffff, var(--primary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+        
+        h2 {
+            color: var(--primary);
+            border-bottom: 2px solid var(--secondary);
+            padding-bottom: 10px;
+            margin-top: 40px;
+            font-size: 2rem;
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+        
+        .strategy-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
+            gap: 30px;
+            margin: 40px 0;
         }
         
-        .card {
-            background: rgba(255, 255, 255, 0.05);
+        .strategy-card {
+            background: rgba(20, 20, 40, 0.7);
             border-radius: 15px;
-            padding: 2rem;
-            transition: all 0.3s ease;
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(108, 92, 231, 0.1);
+            padding: 25px;
+            transition: transform 0.3s, box-shadow 0.3s;
+            border: 1px solid var(--secondary);
+            cursor: pointer;
         }
         
-        .card:hover {
+        .strategy-card:hover {
             transform: translateY(-10px);
-            box-shadow: 0 10px 30px rgba(108, 92, 231, 0.2);
-            border: 1px solid rgba(108, 92, 231, 0.3);
+            box-shadow: 0 15px 30px rgba(0, 150, 255, 0.3);
+            background: rgba(30, 30, 60, 0.8);
         }
         
-        .card h3 {
-            font-size: 1.5rem;
-            margin-bottom: 1rem;
-            color: var(--primary);
-        }
-        
-        .card p {
-            line-height: 1.6;
-            margin-bottom: 1.5rem;
-        }
-        
-        .card-icon {
-            font-size: 2.5rem;
-            margin-bottom: 1rem;
-            color: var(--primary);
-        }
-        
-        .trading-image {
-            width: 100%;
-            border-radius: 10px;
-            margin: 1rem 0;
-            border: 2px solid rgba(108, 92, 231, 0.3);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-        }
-        
-        .pattern-details {
-            margin-top: 3rem;
-        }
-        
-        .pattern-details h3 {
-            font-size: 1.8rem;
-            margin-bottom: 1.5rem;
-            color: var(--primary);
-            border-bottom: 2px solid var(--accent);
-            padding-bottom: 0.5rem;
-            display: inline-block;
-        }
-        
-        .pattern-details ul {
-            padding-left: 1.5rem;
-            margin-bottom: 1.5rem;
-            line-height: 1.6;
-        }
-        
-        .pattern-details li {
-            margin-bottom: 0.5rem;
-        }
-        
-        .pattern-steps {
-            background: var(--block);
-            padding: 1.5rem;
-            border-radius: 10px;
-            margin: 1.5rem 0;
-        }
-        
-        .sar-steps {
-            background: var(--sar);
-            padding: 1.5rem;
-            border-radius: 10px;
-            margin: 1.5rem 0;
-        }
-        
-        .pattern-steps h4, .sar-steps h4 {
-            color: var(--primary);
-            margin-bottom: 1rem;
-        }
-        
-        .pattern-steps ol, .sar-steps ol {
-            padding-left: 1.5rem;
-        }
-        
-        .pattern-steps li, .sar-steps li {
-            margin-bottom: 0.5rem;
-        }
-        
-        .comparison-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin: 2rem 0;
-        }
-        
-        .comparison-table th, .comparison-table td {
-            padding: 1rem;
-            text-align: left;
-            border-bottom: 1px solid rgba(108, 92, 231, 0.2);
-        }
-        
-        .comparison-table th {
-            background-color: rgba(108, 92, 231, 0.2);
-            color: var(--primary);
-        }
-        
-        .comparison-table tr:hover {
-            background-color: rgba(108, 92, 231, 0.05);
-        }
-        
-        .stat-box {
-            background: rgba(255, 255, 255, 0.05);
-            padding: 1.5rem;
-            border-radius: 10px;
-            margin: 1rem 0;
-            border-left: 4px solid var(--accent);
-        }
-        
-        .stat-box h4 {
+        .strategy-card h3 {
             color: var(--accent);
-            margin-bottom: 0.5rem;
+            font-size: 1.5rem;
+            margin-top: 0;
+        }
+        
+        .strategy-card img {
+            width: 100%;
+            border-radius: 10px;
+            margin: 15px 0;
+            border: 1px solid var(--primary);
+            height: 200px;
+            object-fit: cover;
+        }
+        
+        .benefits-list {
+            padding-left: 20px;
+        }
+        
+        .benefits-list li {
+            margin-bottom: 10px;
+            position: relative;
+        }
+        
+        .benefits-list li:before {
+            content: "✓";
+            color: var(--primary);
+            font-weight: bold;
+            margin-right: 10px;
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 30, 0.9);
+            z-index: 1000;
+            overflow-y: auto;
+            padding: 40px;
+            box-sizing: border-box;
+        }
+        
+        .modal-content {
+            background: var(--dark);
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 30px;
+            border-radius: 20px;
+            border: 2px solid var(--primary);
+            position: relative;
+        }
+        
+        .close-modal {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 1.5rem;
+            color: var(--light);
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+        
+        .close-modal:hover {
+            color: var(--accent);
+        }
+        
+        .modal-images {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            margin: 20px 0;
+        }
+        
+        .modal-images img {
+            width: 100%;
+            border-radius: 10px;
+            height: 250px;
+            object-fit: cover;
+        }
+        
+        .chart-container {
+            width: 100%;
+            height: 400px;
+            background: #121230;
+            border-radius: 10px;
+            margin: 20px 0;
+            border: 1px solid var(--secondary);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .chart-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
         }
         
         footer {
-            background: linear-gradient(135deg, var(--dark), var(--primary));
-            padding: 3rem 2rem;
             text-align: center;
+            margin-top: 60px;
+            padding: 30px;
+            background: rgba(10, 10, 30, 0.8);
+            border-radius: 20px 20px 0 0;
         }
         
-        .footer-links {
-            display: flex;
-            justify-content: center;
-            gap: 2rem;
-            margin-bottom: 2rem;
-            flex-wrap: wrap;
-        }
-        
-        .footer-links a {
-            color: var(--light);
-            text-decoration: none;
-            transition: all 0.3s ease;
-        }
-        
-        .footer-links a:hover {
-            color: var(--accent);
-        }
-        
-        .social-icons {
-            display: flex;
-            justify-content: center;
-            gap: 1.5rem;
-            margin-bottom: 2rem;
-        }
-        
-        .social-icons a {
-            color: var(--light);
-            font-size: 1.5rem;
-            transition: all 0.3s ease;
-        }
-        
-        .social-icons a:hover {
-            color: var(--accent);
-            transform: translateY(-5px);
-        }
-        
-        .copyright {
-            opacity: 0.7;
-            font-size: 0.9rem;
-        }
-        
-        /* Efectos futuristas */
-        .glow {
-            text-shadow: 0 0 10px var(--primary), 0 0 20px var(--primary);
-        }
-        
-        .pulse {
-            animation: pulse 2s infinite;
-        }
-        
-        @keyframes pulse {
-            0% {
-                box-shadow: 0 0 0 0 rgba(108, 92, 231, 0.7);
-            }
-            70% {
-                box-shadow: 0 0 0 15px rgba(108, 92, 231, 0);
-            }
-            100% {
-                box-shadow: 0 0 0 0 rgba(108, 92, 231, 0);
-            }
-        }
-        
-        /* Secciones ocultas */
-        .page {
-            display: none;
-        }
-        
-        .active-page {
-            display: block;
-            animation: fadeIn 0.5s ease;
-        }
-        
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        
-        /* Responsive */
         @media (max-width: 768px) {
-            header {
-                flex-direction: column;
-                padding: 1rem;
+            .strategy-grid {
+                grid-template-columns: 1fr;
             }
             
-            nav ul {
-                margin-top: 1rem;
-                gap: 1rem;
-                flex-wrap: wrap;
-                justify-content: center;
+            .modal-images {
+                grid-template-columns: 1fr;
             }
             
-            .hero h2 {
-                font-size: 2.5rem;
-            }
-            
-            .hero p {
-                font-size: 1rem;
-            }
-            
-            h2.section-title {
+            h1 {
                 font-size: 2rem;
             }
         }
@@ -399,522 +207,248 @@
 </head>
 <body>
     <header>
-        <div class="logo">
-            <h1>OXOMAX-TRADING</h1>
+        <div class="container">
+            <h1>OXXO-MAX-TRADING</h1>
+            <p class="subtitle">Combina Block Orders, Parabolic SAR, Ichimoku y EMA para una estrategia profesional</p>
         </div>
-        <nav>
-            <ul>
-                <li><a href="#" class="nav-link" data-page="home">Inicio</a></li>
-                <li><a href="#" class="nav-link" data-page="orderblocks">Order Blocks</a></li>
-                <li><a href="#" class="nav-link" data-page="parabolicsar">Parabolic SAR</a></li>
-                <li><a href="#" class="nav-link" data-page="strategies">Estrategias</a></li>
-                <li><a href="#" class="nav-link" data-page="stats">Estadísticas</a></li>
-            </ul>
-        </nav>
     </header>
-
-    <!-- Página de Inicio -->
-    <section id="home" class="page active-page">
-        <div class="hero">
-            <h2 class="glow">Order Blocks y Parabolic SAR</h2>
-            <p>Domina dos de los conceptos más poderosos del trading institucional y seguimiento de tendencias.</p>
-            <a href="#" class="btn pulse nav-link" data-page="orderblocks">Comenzar Aprendizaje</a>
-        </div>
-
-        <div class="container">
-            <section>
-                <h2 class="section-title">¿Por qué aprender estos conceptos?</h2>
-                <div class="grid">
-                    <div class="card">
-                        <div class="card-icon">🏦</div>
-                        <h3>Order Blocks</h3>
-                        <p>Identifica las zonas donde los grandes bancos e instituciones colocan sus órdenes.</p>
-                    </div>
-                    <div class="card">
-                        <div class="card-icon">📊</div>
-                        <h3>Parabolic SAR</h3>
-                        <p>Sistema de seguimiento de tendencia que proporciona puntos de stop reverso.</p>
-                    </div>
-                    <div class="card">
-                        <div class="card-icon">⚡</div>
-                        <h3>Combinación Poderosa</h3>
-                        <p>Juntos ofrecen alta probabilidad de entrada con gestión de riesgo precisa.</p>
-                    </div>
-                </div>
-            </section>
-
-            <section>
-                <h2 class="section-title">Conceptos Clave</h2>
-                <div class="grid">
-                    <div class="card">
-                        <img src=" https://www.ebc.com/upload/default/20250522/553e26fa6abab06cc14f636624968ba1.png" alt="Order Blocks" class="trading-image">
-                        <h3>Order Blocks</h3>
-                        <p>Zonas de precio donde se concentra la liquidez institucional, actuando como soporte/resistencia.</p>
-                        <a href="#" class="btn nav-link" data-page="orderblocks">Aprender Más</a>
-                    </div>
-                    <div class="card">
-                        <img src="https://bpcdn.co/images/2015/03/05150517/parabolic-sar-as-indicator.png" alt="Parabolic SAR" class="trading-image">
-                        <h3>Parabolic SAR</h3>
-                        <p>Indicador que muestra puntos de posible reversión de tendencia.</p>
-                        <a href="#" class="btn nav-link" data-page="parabolicsar">Aprender Más</a>
-                    </div>
-                </div>
-            </section>
-        </div>
-    </section>
-
-    <!-- Página de Order Blocks -->
-    <section id="orderblocks" class="page">
-        <div class="container">
-            <h2 class="section-title">Order Blocks en Trading</h2>
+    
+    <div class="container">
+        <section>
+            <h2>Estrategias Técnicas Avanzadas</h2>
+            <p>Este sistema integra cuatro herramientas técnicas poderosas para crear una estrategia de trading completa. Haz clic en cada componente para aprender en detalle cómo funciona y cómo integrarlo en tu sistema.</p>
             
-            <div class="card">
-                <h3>¿Qué son los Order Blocks?</h3>
-                <p>Los Order Blocks (Bloques de Orden) son áreas en el gráfico de precios donde las instituciones financieras han colocado grandes volúmenes de órdenes de compra o venta. Estas zonas actúan como:</p>
-                
-                <div class="grid" style="margin-top: 1rem;">
-                    <div>
-                        <p><strong>Soportes/Resistencias:</strong> Zonas donde el precio puede rebotar o revertir</p>
-                        <p><strong>Zonas de Liquidez:</strong> Áreas donde se ejecutan grandes volúmenes</p>
-                    </div>
-                    <div>
-                        <p><strong>Objetivos de Precio:</strong> Puntos donde el precio puede dirigirse</p>
-                        <p><strong>Zonas de Acumulación/Distribución:</strong> Donde las instituciones acumulan o distribuyen activos</p>
-                    </div>
-                </div>
-                
-                <img src="https://i.ytimg.com/vi/-ArRKAte5Mo/maxresdefault.jpg" class="trading-image">
-            </div>
-            
-            <div class="card" style="margin-top: 2rem;">
-                <h3>Cómo Identificar Order Blocks</h3>
-                
-                <div class="pattern-steps">
-                    <h4>Pasos para identificar Order Blocks:</h4>
-                    <ol>
-                        <li>Buscar velas grandes con volumen alto (velas institucionales)</li>
-                        <li>Identificar la zona de apertura/cierre de estas velas</li>
-                        <li>Marcar áreas donde el precio ha mostrado reacción múltiple</li>
-                        <li>Confirmar con volumen y profundidad de mercado si está disponible</li>
-                        <li>Observar cómo reacciona el precio al retornar a estas zonas</li>
-                    </ol>
-                </div>
-                
-                <img src="https://s3.tradingview.com/x/xTeOqMc5_big.png" alt="Identificación Order Blocks" class="trading-image" style="margin-top: 1.5rem;">
-            </div>
-            
-            <div class="card" style="margin-top: 2rem;">
-                <h3>Tipos de Order Blocks</h3>
-                
-                <div class="grid">
-                    <div class="card">
-                        <h4>Bullish Order Block</h4>
-                        <p>Bloque de compra institucional. Características:</p>
-                        <ul>
-                            <li>Vela alcista grande con volumen alto</li>
-                            <li>El precio respeta la zona en retornos</li>
-                            <li>Zona de apertura/cierre actúa como soporte</li>
-                        </ul>
-                    </div>
-                    <div class="card">
-                        <h4>Bearish Order Block</h4>
-                        <p>Bloque de venta institucional. Características:</p>
-                        <ul>
-                            <li>Vela bajista grande con volumen alto</li>
-                            <li>El precio rechaza la zona en retornos</li>
-                            <li>Zona de apertura/cierre actúa como resistencia</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="card" style="margin-top: 2rem;">
-                <h3>Estrategia Básica con Order Blocks</h3>
-                
-                <div class="pattern-steps">
-                    <h4>Entrada en Order Blocks Bajistas:</h4>
-                    <ol>
-                        <li>Identificar Order Block bajista en gráfico diario/semanal</li>
-                        <li>Esperar que el precio retorne a la zona del Order Block</li>
-                        <li>Buscar confirmación con:
-                            <ul style="margin-top: 0.5rem; padding-left: 1.5rem;">
-                                <li>Velas de rechazo (pin bar, engulfing bajista)</li>
-                                <li>Disminución de volumen en el acercamiento</li>
-                                <li>Divergencia bajista en RSI/MACD</li>
-                            </ul>
-                        </li>
-                        <li>Entrar en corto con stop loss por encima del Order Block</li>
-                        <li>Take profit en próximo soporte u Order Block alcista</li>
-                    </ol>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Página de Parabolic SAR -->
-    <section id="parabolicsar" class="page">
-        <div class="container">
-            <h2 class="section-title">Parabolic SAR en Trading</h2>
-            
-            <div class="card">
-                <h3>¿Qué es el Parabolic SAR?</h3>
-                <p>El Parabolic SAR (Stop and Reverse) es un indicador técnico desarrollado por J. Welles Wilder que muestra puntos potenciales de reversión de tendencia. Características clave:</p>
-                
-                <div class="grid" style="margin-top: 1rem;">
-                    <div>
-                        <p><strong>Forma:</strong> Puntos que aparecen encima o debajo del precio</p>
-                        <p><strong>Uso principal:</strong> Identificar dirección de tendencia y puntos de stop</p>
-                    </div>
-                    <div>
-                        <p><strong>Fórmula:</strong> SARn = SARn-1 + AF × (EP - SARn-1)</p>
-                        <p><strong>Parámetros:</strong> AF (Factor de Aceleración), máximo AF, step</p>
-                    </div>
-                </div>
-                
-                <img src="https://commodity.com/wp-content/uploads/technical-analysis/ParabolicSARgoldZG.gif" alt="Fórmula Parabolic SAR" class="trading-image">
-            </div>
-            
-            <div class="card" style="margin-top: 2rem;">
-                <h3>Cómo Interpretar el Parabolic SAR</h3>
-                
-                <div class="sar-steps">
-                    <h4>Señales Básicas:</h4>
-                    <ol>
-                        <li><strong>Tendencia Alcista:</strong> Puntos SAR debajo del precio</li>
-                        <li><strong>Tendencia Bajista:</strong> Puntos SAR encima del precio</li>
-                        <li><strong>Reversión:</strong> Cuando los puntos cambian de posición</li>
-                    </ol>
-                </div>
-                
-                <div class="grid" style="margin-top: 2rem;">
-                    <div class="card">
-                        <h4>Configuración Recomendada</h4>
-                        <ul>
-                            <li>AF (Factor de Aceleración): 0.02</li>
-                            <li>Máximo AF: 0.2</li>
-                            <li>Step: 0.02 (incremento del AF)</li>
-                            <li>Timeframes: 1h en adelante</li>
-                        </ul>
-                    </div>
-                    <div class="card">
-                        <h4>Limitaciones</h4>
-                        <ul>
-                            <li>Poco efectivo en mercados laterales</li>
-                            <li>Puede dar señales tardías</li>
-                            <li>Requiere confirmación con otros indicadores</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="card" style="margin-top: 2rem;">
-                <h3>Estrategia de Venta con Parabolic SAR</h3>
-                
-                <div class="sar-steps">
-                    <h4>Entrada Bajista:</h4>
-                    <ol>
-                        <li>Esperar que los puntos SAR aparezcan encima del precio</li>
-                        <li>Confirmar con:
-                            <ul style="margin-top: 0.5rem; padding-left: 1.5rem;">
-                                <li>Precio bajo media móvil 200</li>
-                                <li>RSI bajo 50 y descendente</li>
-                                <li>Volumen en aumento en dirección bajista</li>
-                            </ul>
-                        </li>
-                        <li>Entrar en corto al cierre de la primera vela con SAR encima</li>
-                        <li>Stop loss: por encima del último máximo o SAR más cercano</li>
-                        <li>Take profit: cuando SAR vuelve bajo el precio o soporte clave</li>
-                    </ol>
-                </div>
-                
-                <img src="https://bpcdn.co/images/2016/05/grade5-parabolic-SAR.png" alt="Ejemplo venta con SAR" class="trading-image" style="margin-top: 1.5rem;">
-            </div>
-        </div>
-    </section>
-
-    <!-- Página de Estrategias Combinadas -->
-    <section id="strategies" class="page">
-        <div class="container">
-            <h2 class="section-title">Estrategias Combinadas</h2>
-            
-            <div class="card">
-                <h3>Order Blocks + Parabolic SAR</h3>
-                <p>Combinando ambos conceptos para operaciones de alta probabilidad:</p>
-                
-                <div class="pattern-steps">
-                    <h4>Estrategia de Venta:</h4>
-                    <ol>
-                        <li>Identificar Order Block bajista en gráfico superior (diario/semanal)</li>
-                        <li>Esperar que el precio se acerque al Order Block en timeframe operativo</li>
-                        <li>Confirmar con:
-                            <ul style="margin-top: 0.5rem; padding-left: 1.5rem;">
-                                <li>Parabolic SAR encima del precio</li>
-                                <li>Rechazo en Order Block (pin bar, engulfing bajista)</li>
-                                <li>Volumen decreciente en acercamiento, creciente en rechazo</li>
-                            </ul>
-                        </li>
-                        <li>Entrar en corto con stop loss por encima del Order Block</li>
-                        <li>Usar SAR para trailing stop dinámico</li>
-                        <li>Take profit en próximo Order Block alcista o soporte clave</li>
-                    </ol>
-                </div>
-                
-                <img src="https://eu-images.contentstack.com/v3/assets/blt73dfd92ee49f59a6/blt7c3db34795338c4e/67cf2fcb9b6deab5c369a182/Cover_(Main).jpg" alt="Estrategia combinada" class="trading-image" style="margin-top: 1.5rem;">
-            </div>
-            
-            <div class="card" style="margin-top: 2rem;">
-                <h3>Gestón de Riesgo en Estrategias Combinadas</h3>
-                
-                <div class="grid">
-                    <div>
-                        <h4>Tamaño de Posición</h4>
-                        <ul>
-                            <li>Riesgo máximo por operación: 1-2% del capital</li>
-                            <li>Distancia stop loss determina tamaño de posición</li>
-                            <li>Relación riesgo/beneficio mínima: 1:2</li>
-                        </ul>
-                    </div>
-                    <div>
-                        <h4>Optimización</h4>
-                        <ul>
-                            <li>AF del SAR según volatilidad del activo</li>
-                            <li>Tamaño mínimo del Order Block según timeframe</li>
-                            <li>Filtrar operaciones con tendencia mayor</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="card" style="margin-top: 2rem;">
-                <h3>Tabla Comparativa de Mercados</h3>
-                <table class="comparison-table">
-                    <thead>
-                        <tr>
-                            <th>Mercado</th>
-                            <th>Order Block Size</th>
-                            <th>SAR AF</th>
-                            <th>Timeframe Ideal</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>Forex Majors</td>
-                            <td>50-100 pips</td>
-                            <td>0.02-0.05</td>
-                            <td>4h - Diario</td>
-                        </tr>
-                        <tr>
-                            <td>Acciones</td>
-                            <td>2-3% del precio</td>
-                            <td>0.01-0.02</td>
-                            <td>Diario</td>
-                        </tr>
-                        <tr>
-                            <td>Índices</td>
-                            <td>1-2% del precio</td>
-                            <td>0.03-0.06</td>
-                            <td>1h - 4h</td>
-                        </tr>
-                        <tr>
-                            <td>Criptomonedas</td>
-                            <td>3-5% del precio</td>
-                            <td>0.05-0.1</td>
-                            <td>4h - Diario</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </section>
-
-    <!-- Página de Estadísticas -->
-    <section id="stats" class="page">
-        <div class="container">
-            <h2 class="section-title">Estadísticas y Backtesting</h2>
-            
-            <div class="card">
-                <h3>Estadísticas de Order Blocks</h3>
-                
-                <div class="stat-box">
-                    <h4>Tasa de Éxito en Diferentes Mercados</h4>
-                    <p>Datos basados en backtesting 2015-2023 (1000+ operaciones):</p>
-                    <ul>
-                        <li><strong>Forex:</strong> 68% de efectividad cuando se combina con volumen</li>
-                        <li><strong>Acciones:</strong> 72% en tendencias claras, 58% en rangos</li>
-                        <li><strong>Índices:</strong> 65% en timeframes mayores (4h+)</li>
-                        <li><strong>Cripto:</strong> 61% debido a mayor volatilidad</li>
+            <div class="strategy-grid">
+                <!-- Block Order -->
+                <div class="strategy-card" onclick="openModal('block')">
+                    <h3>Block Orders</h3>
+                    <img src="https://dotnettutorials.net/wp-content/uploads/2023/02/word-image-35367-4-1536x868.png" alt="Block Orders">
+                    <p>Órdenes de bloque diseñadas para ejecutar grandes volúmenes con mínimo impacto en el mercado.</p>
+                    <ul class="benefits-list">
+                        <li>Ejecución discreta de grandes órdenes</li>
+                        <li>Minimiza el impacto en el mercado</li>
+                        <li>Control avanzado de la ejecución</li>
                     </ul>
                 </div>
                 
-                <div class="stat-box" style="margin-top: 1.5rem;">
-                    <h4>Factores que Aumentan Probabilidad</h4>
-                    <ul>
-                        <li>Confluencia con Fibonacci: +12% efectividad</li>
-                        <li>Order Blocks en zonas psicológicas: +15% efectividad</li>
-                        <li>Confirmación con volumen: +18% efectividad</li>
+                <!-- Parabolic SAR -->
+                <div class="strategy-card" onclick="openModal('sar')">
+                    <h3>Parabolic SAR</h3>
+                    <img src="https://bpcdn.co/images/2015/03/05150021/parabolic-sar-example.png" alt="Parabolic SAR">
+                    <p>Indicador de seguimiento de tendencia que proporciona puntos de stop loss dinámicos.</p>
+                    <ul class="benefits-list">
+                        <li>Identifica reversiones de tendencia</li>
+                        <li>Proporciona stops dinámicos</li>
+                        <li>Excelente para mercados con tendencia</li>
+                    </ul>
+                </div>
+                
+                <!-- Ichimoku -->
+                <div class="strategy-card" onclick="openModal('ichimoku')">
+                    <h3>Ichimoku Kinko Hyo</h3>
+                    <img src="https://www.tecnicasdetrading.com/wp-content/uploads/2011/05/partes-indicador-ichimoku-kynko-hyo.png.webp" alt="Ichimoku">
+                    <p>Sistema completo de trading que proporciona soportes, resistencias, momentum y dirección de tendencia.</p>
+                    <ul class="benefits-list">
+                        <li>Sistema de trading completo</li>
+                        <li>Proporciona múltiples señales</li>
+                        <li>Efectivo en múltiples timeframe</li>
+                    </ul>
+                </div>
+                
+                <!-- EMA -->
+                <div class="strategy-card" onclick="openModal('ema')">
+                    <h3>Media Móvil Exponencial (EMA)</h3>
+                    <img src="https://dcapitalinvestors.com/wp-content/uploads/2016/04/medias-moviles1.jpg" alt="Media Móvil Exponencial">
+                    <p>Indicador de tendencia que da más peso a los precios recientes para una respuesta más rápida.</p>
+                    <ul class="benefits-list">
+                        <li>Suaviza el ruido del mercado</li>
+                        <li>Identifica la dirección de la tendencia</li>
+                        <li>Puede actuar como soporte/resistencia</li>
                     </ul>
                 </div>
             </div>
+        </section>
+        
+        <section>
+            <h2>Integración del Sistema Completo</h2>
+            <div class="chart-container">
+                <img src="https://www.tradingview.com/x/uLvjXWlJ/" alt="Sistema de Trading Integrado">
+            </div>
+            <p>La combinación de estos cuatro elementos crea un sistema de trading robusto donde el Ichimoku proporciona el contexto general del mercado, el Parabolic SAR ofrece puntos de entrada y salida precisos, las EMAs confirman la dirección de la tendencia y los Block Orders permiten una ejecución óptima de las operaciones.</p>
+        </section>
+    </div>
+    
+    <!-- Modal Block Orders -->
+    <div id="block-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeModal('block')">&times;</span>
+            <h2>Block Orders</h2>
+            <p>Las Block Orders son órdenes de compra o venta de grandes cantidades de un activo que se ejecutan de manera discreta para minimizar el impacto en el mercado. Estas órdenes suelen dividirse en partes más pequeñas y ejecutarse a lo largo del tiempo.</p>
             
-            <div class="card" style="margin-top: 2rem;">
-                <h3>Estadísticas de Parabolic SAR</h3>
-                
-                <div class="stat-box">
-                    <h4>Rendimiento en Diferentes Condiciones</h4>
-                    <p>Datos basados en análisis 5000+ operaciones:</p>
-                    <ul>
-                        <li><strong>Tendencias fuertes:</strong> 75% señales correctas</li>
-                        <li><strong>Mercados laterales:</strong> 42% señales correctas</li>
-                        <li><strong>Reversiones:</strong> 68% detectadas con AF 0.02-0.05</li>
-                    </ul>
-                </div>
-                
-                <div class="stat-box" style="margin-top: 1.5rem;">
-                    <h4>Optimización de Parámetros</h4>
-                    <ul>
-                        <li><strong>AF 0.02:</strong> Menos señales pero más precisas (72%)</li>
-                        <li><strong>AF 0.05:</strong> Más señales pero menos precisas (63%)</li>
-                        <li><strong>Máximo AF 0.2:</strong> Mejor para tendencias extendidas</li>
-                    </ul>
-                </div>
+            <div class="modal-images">
+                <img src="https://lh7-qw.googleusercontent.com/docsz/AD_4nXedyxx9oWSxOGEGP3ZRa-l1SgIexdcFSOB9wDeRQwOBRyStZ8jHsTWzu4xROUQBtakD78jVqND7ggb3dBKjtqYhdchhsOsmxvax28CKCOiXTo4rQ45KLpDaBYqP7INg6Ota9u3aNw?key=uivvFn-FZrjBKO2NfAHdXQ" alt="Ejemplo Block Order 1">
+                <img src="https://www.novatostradingclub.com/wp-content/uploads/2024/06/order-block-trading-ejemplo-4.webp" alt="Ejemplo Block Order 2">
             </div>
             
-            <div class="card" style="margin-top: 2rem;">
-                <h3>Backtesting de Estrategia Combinada</h3>
-                
-                <div class="grid">
-                    <div class="card">
-                        <h4>Forex (EUR/USD)</h4>
-                        <ul>
-                            <li>5 años de datos (2018-2023)</li>
-                            <li>64% operaciones ganadoras</li>
-                            <li>Ratio promedio riesgo/beneficio: 1:2.3</li>
-                            <li>Drawdown máximo: 12%</li>
-                        </ul>
-                    </div>
-                    <div class="card">
-                        <h4>SP500 (Futuros)</h4>
-                        <ul>
-                            <li>3 años de datos (2020-2023)</li>
-                            <li>59% operaciones ganadoras</li>
-                            <li>Ratio promedio riesgo/beneficio: 1:2.1</li>
-                            <li>Drawdown máximo: 15%</li>
-                        </ul>
-                    </div>
-                </div>
-                
-                <div class="pattern-steps" style="margin-top: 2rem; text-align: center;">
-                    <h4>Conclusión del Análisis</h4>
-                    <p>La combinación de Order Blocks y Parabolic SAR ofrece una estrategia robusta con estadísticas positivas en múltiples mercados, especialmente cuando se opera en dirección de la tendencia mayor y con gestión de riesgo adecuada.</p>
-                </div>
+            <h3>Beneficios Clave:</h3>
+            <ul class="benefits-list">
+                <li><strong>Ejecución discreta:</strong> Permite mover grandes volúmenes sin alertar al mercado.</li>
+                <li><strong>Minimiza el slippage:</strong> Al dividir la orden en partes, se reduce el impacto en el precio.</li>
+                <li><strong>Control avanzado:</strong> Ofrece múltiples opciones de ejecución (VWAP, TWAP, Iceberg, etc.).</li>
+                <li><strong>Eficiencia de costos:</strong> Reduce los costos de transacción al obtener mejores precios promedio.</li>
+            </ul>
+            
+            <h3>Cómo integrarlo en tu estrategia:</h3>
+            <p>Cuando tu análisis con Ichimoku, Parabolic SAR y EMA indique una oportunidad de trading, utiliza Block Orders para:</p>
+            <ol>
+                <li>Entrar en la posición de manera escalonada</li>
+                <li>Distribuir tu riesgo</li>
+                <li>Salir de la operación sin afectar significativamente el mercado</li>
+            </ol>
+            
+            <div class="chart-container">
+                <img src="https://www.tradingview.com/x/uLvjXWlJ/" alt="Block Orders en acción">
             </div>
         </div>
-    </section>
-
+    </div>
+    
+    <!-- Modal Parabolic SAR -->
+    <div id="sar-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeModal('sar')">&times;</span>
+            <h2>Parabolic SAR (Stop and Reverse)</h2>
+            <p>El Parabolic SAR es un indicador técnico desarrollado por J. Welles Wilder que se utiliza para determinar la dirección del precio y posibles puntos de reversión. Aparece como una serie de puntos colocados encima o debajo del precio.</p>
+            
+            <div class="modal-images">
+                <img src="https://www.forex.academy/wp-content/uploads/2020/06/parabolic-sar-indicator-explained-1024x576.jpg" alt="Ejemplo Parabolic SAR 1">
+                <img src="https://www.ifcm.co.uk/upload/medialibrary/8b7/8b7b3b0c9f5e0a3f1c4e3a3f1c4e3a3.png" alt="Ejemplo Parabolic SAR 2">
+            </div>
+            
+            <h3>Beneficios Clave:</h3>
+            <ul class="benefits-list">
+                <li><strong>Identifica tendencias:</strong> Los puntos debajo del precio indican tendencia alcista, arriba indican tendencia bajista.</li>
+                <li><strong>Stop loss dinámico:</strong> Proporciona un trailing stop que se ajusta automáticamente.</li>
+                <li><strong>Señales claras:</strong> La inversión de los puntos indica posible cambio de tendencia.</li>
+                <li><strong>Fácil interpretación:</strong> Visualmente intuitivo y sencillo de aplicar.</li>
+            </ul>
+            
+            <h3>Cómo usarlo con otras herramientas:</h3>
+            <p>Combina el Parabolic SAR con:</p>
+            <ol>
+                <li><strong>Ichimoku:</strong> Usa el SAR cuando el precio esté por encima/abajo de la nube para confirmar tendencias fuertes.</li>
+                <li><strong>EMA:</strong> Filtra señales del SAR cuando coincida con la dirección de las EMAs.</li>
+                <li><strong>Block Orders:</strong> Usa los puntos del SAR como niveles para colocar tus órdenes de bloque.</li>
+            </ol>
+            
+            <div class="chart-container">
+                <img src="https://www.tradingview.com/x/uLvjXWlJ/" alt="Parabolic SAR en acción">
+            </div>
+        </div>
+    </div>
+    
+    <!-- Modal Ichimoku -->
+    <div id="ichimoku-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeModal('ichimoku')">&times;</span>
+            <h2>Ichimoku Kinko Hyo</h2>
+            <p>El Ichimoku Kinko Hyo, o "Gráfico de Equilibrio a Simple Vista", es un sistema completo de trading que proporciona información sobre soportes/resistencias, dirección de la tendencia, momentum y señales de trading.</p>
+            
+            <div class="modal-images">
+                <img src="https://www.ig.com/es/glosario-trading/que-es-ichimoku/images/ichimoku-chart.png" alt="Ejemplo Ichimoku 1">
+                <img src="https://www.forex.academy/wp-content/uploads/2020/06/ichimoku-cloud-indicator-explained-1024x576.jpg" alt="Ejemplo Ichimoku 2">
+            </div>
+            
+            <h3>Componentes Principales:</h3>
+            <ul class="benefits-list">
+                <li><strong>Tenkan-sen (Línea de Conversión):</strong> Promedio de los máximos y mínimos de los últimos 9 periodos.</li>
+                <li><strong>Kijun-sen (Línea Base):</strong> Promedio de los máximos y mínimos de los últimos 26 periodos.</li>
+                <li><strong>Senkou Span A (Nube):</strong> Promedio de Tenkan y Kijun, proyectada 26 periodos adelante.</li>
+                <li><strong>Senkou Span B (Nube):</strong> Promedio de los máximos y mínimos de los últimos 52 periodos, proyectado 26 adelante.</li>
+                <li><strong>Chikou Span (Línea Retrasada):</strong> Precio de cierre proyectado 26 periodos atrás.</li>
+            </ul>
+            
+            <h3>Beneficios en el Trading:</h3>
+            <ol>
+                <li><strong>Análisis completo:</strong> Proporciona múltiples señales en un solo vistazo.</li>
+                <li><strong>Identificación de tendencias:</strong> La posición del precio respecto a la nube indica la tendencia.</li>
+                <li><strong>Soportes y resistencias:</strong> La nube actúa como zona dinámica de soporte/resistencia.</li>
+                <li><strong>Señales de trading:</strong> Cruces entre Tenkan y Kijun, precio vs nube, etc.</li>
+            </ol>
+            
+            <div class="chart-container">
+                <img src="https://www.tradingview.com/x/uLvjXWlJ/" alt="Ichimoku en acción">
+            </div>
+        </div>
+    </div>
+    
+    <!-- Modal EMA -->
+    <div id="ema-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeModal('ema')">&times;</span>
+            <h2>Media Móvil Exponencial (EMA)</h2>
+            <p>La Media Móvil Exponencial es un tipo de media móvil que da más peso a los precios más recientes, lo que la hace más sensible a los nuevos datos que una Media Móvil Simple (SMA).</p>
+            
+            <div class="modal-images">
+                <img src="https://www.forex.academy/wp-content/uploads/2020/06/exponential-moving-average-1024x576.jpg" alt="Ejemplo EMA 1">
+                <img src="https://www.investopedia.com/thmb/1PnoQ-7uY6Y3i5X8z7Q3Q9J9Z3Q=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/block-trade-5bfd31a346e0fb0058eec27a" alt="Ejemplo EMA 2">
+            </div>
+            
+            <h3>Beneficios Clave:</h3>
+            <ul class="benefits-list">
+                <li><strong>Respuesta rápida:</strong> Reacciona más rápido que una SMA a los cambios de precio.</li>
+                <li><strong>Filtro de tendencia:</strong> El precio sobre la EMA indica tendencia alcista, debajo bajista.</li>
+                <li><strong>Soporte/resistencia dinámico:</strong> Puede actuar como nivel de soporte en tendencias alcistas o resistencia en bajistas.</li>
+                <li><strong>Señales de cruce:</strong> El cruce de EMAs de diferentes periodos puede generar señales.</li>
+            </ul>
+            
+            <h3>Configuraciones Recomendadas:</h3>
+            <p>Para este sistema avanzado, recomendamos:</p>
+            <ol>
+                <li><strong>EMA Rápida:</strong> 9 periodos (coincide con Tenkan del Ichimoku)</li>
+                <li><strong>EMA Media:</strong> 26 periodos (coincide con Kijun del Ichimoku)</li>
+                <li><strong>EMA Lenta:</strong> 52 periodos (para tendencia principal)</li>
+            </ol>
+            
+            <h3>Integración con el Sistema:</h3>
+            <p>Usa las EMAs para:</p>
+            <ul>
+                <li>Confirmar la dirección de la tendencia identificada por el Ichimoku</li>
+                <li>Filtrar señales del Parabolic SAR (solo operar en la dirección de la EMA principal)</li>
+                <li>Determinar niveles óptimos para colocar Block Orders</li>
+            </ul>
+            
+            <div class="chart-container">
+                <img src="https://www.tradingview.com/x/uLvjXWlJ/" alt="EMA en acción">
+            </div>
+        </div>
+    </div>
+    
     <footer>
-        <div class="footer-links">
-            <a href="#" class="nav-link" data-page="home">Inicio</a>
-            <a href="#" class="nav-link" data-page="orderblocks">Order Blocks</a>
-            <a href="#" class="nav-link" data-page="parabolicsar">Parabolic SAR</a>
-            <a href="#" class="nav-link" data-page="strategies">Estrategias</a>
-            <a href="#" class="nav-link" data-page="stats">Estadísticas</a>
-            <a href="#">Política de Privacidad</a>
-            <a href="#">Términos de Uso</a>
+        <div class="container">
+            <h3>Sistema de Trading Avanzado</h3>
+            <p>Combina lo mejor del análisis técnico con ejecución profesional para trading institucional</p>
+            <p>© 2023 Advanced Trading Systems. Todos los derechos reservados.</p>
         </div>
-        
-        <div class="social-icons">
-            <a href="#"><span>📱</span></a>
-            <a href="#"><span>📧</span></a>
-            <a href="#"><span>💬</span></a>
-            <a href="#"><span>🐦</span></a>
-            <a href="#"><span>📹</span></a>
-        </div>
-        
-        <p class="copyright">© 2010 Oxomax-Trading. Todos los derechos reservados.</p>
     </footer>
-
+    
     <script>
-        // Navegación entre páginas
-        document.querySelectorAll('.nav-link').forEach(link => {
-            link.addEventListener('click', function(e) {
-                e.preventDefault();
-                const pageId = this.getAttribute('data-page');
-                
-                // Oculta todas las páginas
-                document.querySelectorAll('.page').forEach(page => {
-                    page.classList.remove('active-page');
-                });
-                
-                // Muestra la página seleccionada
-                document.getElementById(pageId).classList.add('active-page');
-                
-                // Desplaza hacia arriba
-                window.scrollTo(0, 0);
-            });
-        });
-        
-        // Efectos especiales
-        const cards = document.querySelectorAll('.card');
-        cards.forEach(card => {
-            card.addEventListener('mouseenter', () => {
-                const randomColor = `hsl(${Math.random() * 60 + 240}, 100%, 50%)`;
-                card.style.borderColor = randomColor;
-                card.style.boxShadow = `0 10px 30px ${randomColor}40`;
-            });
-            
-            card.addEventListener('mouseleave', () => {
-                card.style.borderColor = 'rgba(108, 92, 231, 0.1)';
-                card.style.boxShadow = 'none';
-            });
-        });
-        
-        // Simulación de precios en tiempo real
-        function updatePriceTickers() {
-            const currencies = ['EUR/USD', 'GBP/USD', 'USD/JPY', 'BTC/USD', 'Gold'];
-            const priceElements = document.querySelectorAll('.price-ticker');
-            
-            priceElements.forEach(el => {
-                const randomCurrency = currencies[Math.floor(Math.random() * currencies.length)];
-                const randomPrice = (Math.random() * 1.5 + 0.5).toFixed(4);
-                const randomChange = (Math.random() * 0.02 - 0.01).toFixed(4);
-                
-                el.innerHTML = `
-                    <span>${randomCurrency}</span>
-                    <span>${randomPrice}</span>
-                    <span style="color: ${randomChange >= 0 ? 'var(--primary)' : 'var(--accent)'}">
-                        ${randomChange >= 0 ? '+' : ''}${randomChange}%
-                    </span>
-                `;
-            });
+        function openModal(strategy) {
+            document.getElementById(`${strategy}-modal`).style.display = 'block';
+            document.body.style.overflow = 'hidden';
         }
         
-        // Crear elementos de ticker si no existen
-        if (!document.querySelector('.price-ticker')) {
-            const tickerContainer = document.createElement('div');
-            tickerContainer.className = 'price-ticker';
-            tickerContainer.style.position = 'fixed';
-            tickerContainer.style.bottom = '0';
-            tickerContainer.style.left = '0';
-            tickerContainer.style.right = '0';
-            tickerContainer.style.background = 'rgba(0, 0, 0, 0.7)';
-            tickerContainer.style.padding = '0.5rem';
-            tickerContainer.style.display = 'flex';
-            tickerContainer.style.justifyContent = 'space-around';
-            tickerContainer.style.zIndex = '1000';
-            document.body.appendChild(tickerContainer);
-            
-            for (let i = 0; i < 5; i++) {
-                const ticker = document.createElement('div');
-                ticker.className = 'price-ticker-item';
-                ticker.style.display = 'flex';
-                ticker.style.gap = '1rem';
-                tickerContainer.appendChild(ticker);
+        function closeModal(strategy) {
+            document.getElementById(`${strategy}-modal`).style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+        
+        // Cerrar modal al hacer clic fuera del contenido
+        window.onclick = function(event) {
+            if (event.target.className === 'modal') {
+                event.target.style.display = 'none';
+                document.body.style.overflow = 'auto';
             }
         }
-        
-        // Actualizar precios cada 3 segundos
-        setInterval(updatePriceTickers, 3000);
-        updatePriceTickers();
     </script>
 </body>
 </html>
